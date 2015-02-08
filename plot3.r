@@ -1,0 +1,16 @@
+setwd("C:\\Users\\Marketelligent\\Desktop\\R_Exploratory_Analysis")
+ds <- read.table("./household_power_consumption.txt", sep=";", header=TRUE, na.strings="?")
+head(ds)
+ds$Time <- paste(ds$Date, ds$Time, sep = " ")
+ds$Date <- as.Date(ds$Date, format="%d/%m/%Y")
+ds$Time <- strptime(ds$Time, format = "%d/%m/%Y %H:%M:%S")
+lapply(ds,class)
+dsReqdDates <- ds[ds$Date %in% as.Date(c('2007-02-01','2007-02-02')),]
+head(dsReqdDates)
+
+png("./plot3.png", width=480, height=480)
+plot(dsReqdDates$Time,dsReqdDates$Sub_metering_1, pch='l', xlab="", ylab = "Energy sub metering", col="Black")
+lines(dsReqdDates$Time,dsReqdDates$Sub_metering_2, pch='l', xlab="", ylab = "", col="Red")
+lines(dsReqdDates$Time,dsReqdDates$Sub_metering_3, pch='l', xlab="", ylab = "", col="Blue")
+legend("topright", lty=1, col=c("Black","Red","Blue"),legend=c("Sub_metering_1","Sub_metering_2","Sub_metering_3"))
+dev.off()
